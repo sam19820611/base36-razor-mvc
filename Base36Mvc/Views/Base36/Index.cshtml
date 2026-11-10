@@ -1,0 +1,49 @@
+@model Base36Mvc.Models.Base36Model
+@{ Layout = null; }
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>10 / 36 進制轉換</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 720px; margin: 48px auto; padding: 0 20px; line-height: 1.7; }
+        label { display: block; font-weight: bold; }
+        input { box-sizing: border-box; width: 100%; padding: 10px; font-size: 1rem; }
+        .field { margin-bottom: 20px; }
+        .field-validation-error, .validation-summary-errors { color: #b42318; }
+        button { padding: 10px 24px; font-size: 1rem; cursor: pointer; }
+        output { display: block; overflow-wrap: anywhere; padding: 12px; background: #eef4ff; }
+    </style>
+</head>
+<body>
+    <h1>10 / 36 進制轉換</h1>
+    <p>請至少填寫一個欄位，也可同時填寫。限非負整數，每個輸入最多 100 字元；英文字母不分大小寫。</p>
+    @using (Html.BeginForm("Index", "Base36", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div class="field">
+            @Html.LabelFor(m => m.DecimalInput)
+            @Html.TextBoxFor(m => m.DecimalInput, new { maxlength = 100, inputmode = "numeric", placeholder = "例如：123456" })
+            @Html.ValidationMessageFor(m => m.DecimalInput)
+        </div>
+        <div class="field">
+            @Html.LabelFor(m => m.Base36Input)
+            @Html.TextBoxFor(m => m.Base36Input, new { maxlength = 100, placeholder = "例如：2N9C" })
+            @Html.ValidationMessageFor(m => m.Base36Input)
+        </div>
+        <button type="submit">轉換</button>
+    }
+    @if (Model.Base36Result is not null)
+    {
+        <h2>十進制 → 三十六進制</h2>
+        <output>@Model.Base36Result</output>
+    }
+    @if (Model.DecimalResult is not null)
+    {
+        <h2>三十六進制 → 十進制</h2>
+        <output>@Model.DecimalResult</output>
+    }
+</body>
+</html>
